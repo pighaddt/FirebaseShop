@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1058338611031",
+    "project_id": "fir-shop-37e64",
+    "storage_bucket": "fir-shop-37e64.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1058338611031:android:58ecd681deb3e9bf90e812",
+        "android_client_info": {
+          "package_name": "com.angus.shop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1058338611031-t379nt60vnv9id03nt3ndq1m38eonqnt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgGc-NlLy4QKtegUJToXPg-288Gdq3hU4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1058338611031-t379nt60vnv9id03nt3ndq1m38eonqnt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
