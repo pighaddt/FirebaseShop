@@ -1,5 +1,6 @@
 package com.angus.shop
 
+import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -8,7 +9,9 @@ import android.view.Menu
 import android.view.MenuItem
 
 class MainActivity : AppCompatActivity() {
-
+    companion object{
+        private val RC_SIGNIN  = 1
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -32,6 +35,12 @@ class MainActivity : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.action_settings -> true
+            R.id.action_signin ->{
+                startActivityForResult(
+                        Intent(this@MainActivity, SignInActivity::class.java),
+                RC_SIGNIN)
+               return true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
