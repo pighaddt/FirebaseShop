@@ -47,21 +47,28 @@ class SignInActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == RC_GOOGLE_SIGN_IN){
+            Snackbar.make(btn_login, "nothing", Snackbar.LENGTH_SHORT).show()
+        }
+//        googleSignIn(requestCode, data)
+    }
+
+    private fun googleSignIn(requestCode: Int, data: Intent?) {
+        if (requestCode == RC_GOOGLE_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             val account = task.getResult(ApiException::class.java)
             Log.d(TAG, "onActivityResult: ${account?.id}")
             val credential = GoogleAuthProvider.getCredential(account?.idToken, null)
             FirebaseAuth.getInstance()
-                .signInWithCredential(credential)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful){
-                        setResult(RESULT_OK)
-                        finish()
-                    }else{
-                        Log.d(TAG, "onActivityResult: ${task.exception?.message}")
-                        Snackbar.make(google_sign_in, "Firebase Authentication failed", Snackbar.LENGTH_SHORT).show()
+                    .signInWithCredential(credential)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            setResult(RESULT_OK)
+                            finish()
+                        } else {
+                            Log.d(TAG, "onActivityResult: ${task.exception?.message}")
+                            Snackbar.make(google_sign_in, "Firebase Authentication failed", Snackbar.LENGTH_SHORT).show()
+                        }
                     }
-                }
         }
     }
 
