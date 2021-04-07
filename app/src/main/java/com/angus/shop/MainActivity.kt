@@ -9,13 +9,15 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_sign_in.*
 
 class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
     companion object{
-        private val RC_SIGNIN  = 1
+        private val RC_SIGNIN_GOOGLE = 1
+        private val RC_SIGNIN_FIREBASEUI: Int = 2
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,9 +71,20 @@ class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
         return when (item.itemId) {
             R.id.action_settings -> true
             R.id.action_signin ->{
-                startActivityForResult(
+                val idpConfig = arrayOf(AuthUI.IdpConfig.EmailBuilder().build(),
+                        AuthUI.IdpConfig.GoogleBuilder().build(),
+//                        AuthUI.IdpConfig.FacebookBuilder().build(),
+                        AuthUI.IdpConfig.AnonymousBuilder().build())
+                val firebaseUIIntent = AuthUI.getInstance()
+                        .createSignInIntentBuilder()
+                        .setAvailableProviders(idpConfig.toMutableList())
+                        .setLogo(R.drawable.payment__card)
+                        .setIsSmartLockEnabled(false)
+                        .build()
+                startActivityForResult(firebaseUIIntent, RC_SIGNIN_FIREBASEUI)
+                /*startActivityForResult(
                         Intent(this@MainActivity, SignInActivity::class.java),
-                RC_SIGNIN)
+                RC_SIGNIN)*/
                return true
             }
             R.id.action_signout -> {
