@@ -15,22 +15,23 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_sign_in.*
 
 class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
-    companion object{
+    companion object {
         private val RC_SIGNIN_GOOGLE = 1
         private val RC_SIGNIN_FIREBASEUI: Int = 2
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
         findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+                .setAction("Action", null).show()
         }
         verify_email.setOnClickListener {
             FirebaseAuth.getInstance().currentUser.sendEmailVerification()
                 .addOnCompleteListener { task ->
-                    if (task.isSuccessful){
+                    if (task.isSuccessful) {
                         Snackbar.make(it, "Send email", Snackbar.LENGTH_LONG).show()
                     }
                 }
@@ -42,16 +43,18 @@ class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
+
     override fun onAuthStateChanged(auth: FirebaseAuth) {
         val user = auth.currentUser
-            if (user != null){
-                userInfo.text = "Email : ${user.email} / ${user.isEmailVerified}"
-                verify_email.visibility = if (user.isEmailVerified) View.GONE else  View.VISIBLE
-            }else{
-                userInfo.text = "NOT LOGIN"
-                verify_email.visibility = View.GONE
-            }
+        if (user != null) {
+            userInfo.text = "Email : ${user.email} / ${user.isEmailVerified}"
+            verify_email.visibility = if (user.isEmailVerified) View.GONE else View.VISIBLE
+        } else {
+            userInfo.text = "NOT LOGIN"
+            verify_email.visibility = View.GONE
+        }
     }
+
     override fun onStart() {
         super.onStart()
         FirebaseAuth.getInstance().addAuthStateListener(this)
@@ -63,29 +66,35 @@ class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
     }
 
 
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.action_settings -> true
-            R.id.action_signin ->{
-                val idpConfig = arrayOf(AuthUI.IdpConfig.EmailBuilder().build(),
-                        AuthUI.IdpConfig.GoogleBuilder().build(),
-                        AuthUI.IdpConfig.FacebookBuilder().build(),
-                        AuthUI.IdpConfig.AnonymousBuilder().build())
+            R.id.action_signin -> {
+                val whiteList = listOf<String>("tw", "hk", "cn")
+                val idpConfig = arrayOf(
+                    AuthUI.IdpConfig.EmailBuilder().build(),
+                    AuthUI.IdpConfig.GoogleBuilder().build(),
+                    AuthUI.IdpConfig.FacebookBuilder().build(),
+                    AuthUI.IdpConfig.PhoneBuilder()
+                        .setWhitelistedCountries(whiteList)
+                        .build(),
+                    AuthUI.IdpConfig.AnonymousBuilder().build()
+                )
                 val firebaseUIIntent = AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setAvailableProviders(idpConfig.toMutableList())
-                        .setLogo(R.drawable.payment__card)
-                        .setIsSmartLockEnabled(false)
-                        .build()
+                    .createSignInIntentBuilder()
+                    .setAvailableProviders(idpConfig.toMutableList())
+                    .setLogo(R.drawable.payment__card)
+                    .setIsSmartLockEnabled(false)
+                    .setTheme(R.style.SignUp)
+                    .build()
                 startActivityForResult(firebaseUIIntent, RC_SIGNIN_FIREBASEUI)
                 /*startActivityForResult(
                         Intent(this@MainActivity, SignInActivity::class.java),
                 RC_SIGNIN)*/
-               return true
+                return true
             }
             R.id.action_signout -> {
                 FirebaseAuth.getInstance().signOut()

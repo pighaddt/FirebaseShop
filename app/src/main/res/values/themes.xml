@@ -19,6 +19,13 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="SignUp" parent="FirebaseUI">
+        <item name="colorPrimary">@color/matreial_green</item>
+        <item name="colorPrimaryVariant">@color/matreial_yellow</item>
+        <item name="colorOnPrimary">@color/matreial_blue</item>
+        <item name="colorControlActivated">@color/matreial_orange</item>
+    </style>
+
     <style name="Theme.Shop.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.Shop.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
