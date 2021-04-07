@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
             R.id.action_signin ->{
                 val idpConfig = arrayOf(AuthUI.IdpConfig.EmailBuilder().build(),
                         AuthUI.IdpConfig.GoogleBuilder().build(),
-//                        AuthUI.IdpConfig.FacebookBuilder().build(),
+                        AuthUI.IdpConfig.FacebookBuilder().build(),
                         AuthUI.IdpConfig.AnonymousBuilder().build())
                 val firebaseUIIntent = AuthUI.getInstance()
                         .createSignInIntentBuilder()
