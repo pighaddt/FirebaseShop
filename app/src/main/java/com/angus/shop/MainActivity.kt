@@ -7,19 +7,16 @@ import android.view.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_sign_in.*
 
 class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
-    private lateinit var adapter: FirestoreRecyclerAdapter<item, ItemHolder>
+    private lateinit var adapter: FirestoreRecyclerAdapter<Item, ItemHolder>
 
     companion object {
         private val TAG = MainActivity::class.java.simpleName
@@ -50,19 +47,20 @@ class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
         val query = FirebaseFirestore.getInstance()
             .collection("items")
             .limit(10)
-        val options = FirestoreRecyclerOptions.Builder<item>()
-            .setQuery(query, item::class.java)
+        val options = FirestoreRecyclerOptions.Builder<Item>()
+            .setQuery(query, Item::class.java)
             .build()
-         adapter = object : FirestoreRecyclerAdapter<item, ItemHolder>(options) {
+         adapter = object : FirestoreRecyclerAdapter<Item, ItemHolder>(options) {
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.item_row, parent, false)
                 return ItemHolder(view)
             }
 
-            override fun onBindViewHolder(holder: ItemHolder, position: Int, item: item) {
-                holder.bindTo(item)
+            override fun onBindViewHolder(holder: ItemHolder, position: Int, Item: Item) {
+                Item.id = snapshots.getSnapshot(position).id
+                holder.bindTo(Item)
                 holder.itemView.setOnClickListener {
-                    itemClicked(item, position)
+                    itemClicked(Item, position)
                 }
             }
 
@@ -70,8 +68,11 @@ class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
         recycler.adapter = adapter
     }
 
-    private fun itemClicked(item: item, position: Int) {
-        Log.d(TAG, "itemClicked: ${item.title} , ${position}")
+    private fun itemClicked(Item: Item, position: Int) {
+        Log.d(TAG, "itemClicked: ${Item.title} , ${position}")
+        val intent = Intent(this, DetailActivity::class.java)
+        intent.putExtra("ITEM", Item)
+        startActivity(intent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

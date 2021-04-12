@@ -11,11 +11,12 @@ class ItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
     val priceText = itemView.item_price
     val imageView = itemView.item_image
 
-    fun bindTo(item: item){
-        titleText.text = item.title
-        priceText.text = item.price.toString()
+    fun bindTo(Item: Item){
+        titleText.text = Item.title
+        priceText.text = Item.price.toString()
         Glide.with(itemView.context)
-            .load(item.imageUrl)
+            .load(Item.imageUrl)
+            .placeholder(R.drawable.com_facebook_button_icon)
             .apply(RequestOptions().override(120))
             .into(imageView)
     }
