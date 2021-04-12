@@ -2,20 +2,27 @@ package com.angus.shop
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_sign_in.*
 
 class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
+    private lateinit var adapter: FirestoreRecyclerAdapter<item, ItemHolder>
+
     companion object {
+        private val TAG = MainActivity::class.java.simpleName
         private val RC_SIGNIN_GOOGLE = 1
         private val RC_SIGNIN_FIREBASEUI: Int = 2
     }
@@ -23,7 +30,7 @@ class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setSupportActionBar(findViewById(R.id.toolbar))
+//        setSupportActionBar(findViewById(R.id.toolbar))
         findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
@@ -36,6 +43,35 @@ class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
                     }
                 }
         }
+
+        //recycler setting
+        recycler.setHasFixedSize(true)
+        recycler.layoutManager = LinearLayoutManager(this)
+        val query = FirebaseFirestore.getInstance()
+            .collection("items")
+            .limit(10)
+        val options = FirestoreRecyclerOptions.Builder<item>()
+            .setQuery(query, item::class.java)
+            .build()
+         adapter = object : FirestoreRecyclerAdapter<item, ItemHolder>(options) {
+            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_row, parent, false)
+                return ItemHolder(view)
+            }
+
+            override fun onBindViewHolder(holder: ItemHolder, position: Int, item: item) {
+                holder.bindTo(item)
+                holder.itemView.setOnClickListener {
+                    itemClicked(item, position)
+                }
+            }
+
+        }
+        recycler.adapter = adapter
+    }
+
+    private fun itemClicked(item: item, position: Int) {
+        Log.d(TAG, "itemClicked: ${item.title} , ${position}")
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -47,10 +83,10 @@ class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
     override fun onAuthStateChanged(auth: FirebaseAuth) {
         val user = auth.currentUser
         if (user != null) {
-            userInfo.text = "Email : ${user.email} / ${user.isEmailVerified}"
+//            userInfo.text = "Email : ${user.email} / ${user.isEmailVerified}"
             verify_email.visibility = if (user.isEmailVerified) View.GONE else View.VISIBLE
         } else {
-            userInfo.text = "NOT LOGIN"
+//            userInfo.text = "NOT LOGIN"
             verify_email.visibility = View.GONE
         }
     }
@@ -58,11 +94,13 @@ class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
     override fun onStart() {
         super.onStart()
         FirebaseAuth.getInstance().addAuthStateListener(this)
+        adapter.startListening()
     }
 
     override fun onStop() {
         super.onStop()
         FirebaseAuth.getInstance().removeAuthStateListener(this)
+        adapter.stopListening()
     }
 
 
