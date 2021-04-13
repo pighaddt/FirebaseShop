@@ -13,6 +13,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
@@ -46,6 +47,7 @@ class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
         recycler.layoutManager = LinearLayoutManager(this)
         val query = FirebaseFirestore.getInstance()
             .collection("items")
+            .orderBy("viewCount", Query.Direction.DESCENDING)
             .limit(10)
         val options = FirestoreRecyclerOptions.Builder<Item>()
             .setQuery(query, Item::class.java)

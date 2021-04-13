@@ -10,14 +10,17 @@ class ItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
     val titleText = itemView.item_title
     val priceText = itemView.item_price
     val imageView = itemView.item_image
+    val countText = itemView.item_count
 
-    fun bindTo(Item: Item){
-        titleText.text = Item.title
-        priceText.text = Item.price.toString()
+    fun bindTo(item: Item){
+        titleText.text = item.title
+        priceText.text = item.price.toString()
         Glide.with(itemView.context)
-            .load(Item.imageUrl)
+            .load(item.imageUrl)
             .placeholder(R.drawable.com_facebook_button_icon)
             .apply(RequestOptions().override(120))
             .into(imageView)
+        countText.text = item.viewCount.toString()
+        countText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.eye, 0, 0, 0)
     }
 }
