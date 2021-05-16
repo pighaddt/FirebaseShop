@@ -18,7 +18,7 @@ class DetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_detail)
         item = intent.getParcelableExtra<Item>("ITEM")!!
         web.settings.javaScriptEnabled = true
-        web.loadUrl("https://translate.google.com.tw/?hl=zh-TW&sl=en&tl=zh-TW&text=extraordinary&op=translate")
+        web.loadUrl("https://www.momoshop.com.tw/goods/GoodsDetail.jsp?i_code=8154854&osm=Ad07&utm_source=googleshop&utm_medium=googleshop_USC&utm_content=bn&gclid=CjwKCAjwjuqDBhAGEiwAdX2cjx0wwJ1sUgbywYRjGFlP4L4FwUJwop05eQB1GR48SbEROW6l5DZwRBoC5PIQAvD_BwE")
 //        Log.d(TAG, "onCreate: ${item.content}")
     }
 
