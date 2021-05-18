@@ -53,6 +53,7 @@ class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
         //spinner
         FirebaseFirestore.getInstance().collection("categories")
             .get().addOnCompleteListener { task ->
+                Log.d(TAG, "task: ${task.exception}")
                 if (task.isSuccessful){
                     task.result?.let {
                         categories.add(Category("", "不分類"))
