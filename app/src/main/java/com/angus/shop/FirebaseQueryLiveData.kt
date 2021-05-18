@@ -28,5 +28,24 @@ class FirebaseQueryLiveData : LiveData<QuerySnapshot>(), EventListener<QuerySnap
             value = querySnapshot
         }
     }
+
+    fun setCategory(categoryId: String) {
+        if (isRegistration){
+            registration.remove()
+            isRegistration = false
+        }
+        if (categoryId.length > 0){
+            query = FirebaseFirestore.getInstance().collection("items")
+                .whereEqualTo("category", categoryId)
+                .orderBy("viewCount", Query.Direction.DESCENDING)
+                .limit(10)
+        }else{
+            query = FirebaseFirestore.getInstance().collection("items")
+                .orderBy("viewCount", Query.Direction.DESCENDING)
+                .limit(10)
+        }
+        registration = query.addSnapshotListener(this)
+        isRegistration = true
+    }
 }
 

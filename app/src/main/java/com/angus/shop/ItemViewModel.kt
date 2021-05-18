@@ -12,7 +12,10 @@ class ItemViewModel : ViewModel(){
     private var firebaseQueryLiveData = FirebaseQueryLiveData()
 
     fun getItems() : FirebaseQueryLiveData {
-
         return firebaseQueryLiveData
+    }
+
+    fun getCategory(categoryId: String){
+        firebaseQueryLiveData.setCategory(categoryId)
     }
 }

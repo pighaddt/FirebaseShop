@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
                         categories.add(Category("", "不分類"))
                         for (doc in it){
                             categories.add(Category(doc.id,  doc.data.get("name").toString()))
+                            Log.d(TAG, "categories: ${doc.id} ${doc.data.get("name").toString()}")
                         }
                         spinner.adapter = ArrayAdapter<Category>(
                             this@MainActivity,
@@ -74,7 +75,8 @@ class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
                                 position: Int,
                                 id: Long
                             ) {
-//                                setupAdapter()
+//                                setupAdapter
+                                itemViewModel.getCategory(categories[position].id)
                             }
 
                             override fun onNothingSelected(parent: AdapterView<*>?) {
