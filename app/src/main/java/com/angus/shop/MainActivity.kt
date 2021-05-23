@@ -103,9 +103,17 @@ class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
                 item.id = doc.id
                 list.add(item)
             }
-
             adapter.items = list
             adapter.notifyDataSetChanged()
+            //Room insert
+            list.forEach {
+                ItemDatabase.getInstance(this@MainActivity)?.getItemDao()?.addItem(it)
+            }
+            //print database content
+            ItemDatabase.getInstance(this@MainActivity)?.getItemDao()?.getItems()?.forEach {
+                Log.d(TAG, "Room: ${it.title} ${it.id} ${it.price}")
+            }
+            
         })
 //        setupAdapter()
     }
