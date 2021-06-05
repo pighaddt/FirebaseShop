@@ -13,12 +13,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.angus.shop.model.Category
+import com.angus.shop.model.Item
+import com.angus.shop.view.ItemViewModel
 import com.firebase.ui.auth.AuthUI
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter
-import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
@@ -96,23 +96,17 @@ class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
         recycler.adapter = adapter
         itemViewModel = ViewModelProvider(this).get(ItemViewModel::class.java)
         itemViewModel.getItems().observe(this, Observer {
-            Log.d(TAG, "observe: ${it.size()}")
-            val list = mutableListOf<Item>()
-            for (doc in it.documents){
-                val item = doc.toObject(Item::class.java) ?: Item()
-                item.id = doc.id
-                list.add(item)
-            }
-            adapter.items = list
+            Log.d(TAG, "observe: ${it.size}")
+            adapter.items = it
             adapter.notifyDataSetChanged()
-            //Room insert
+            /*//Room insert
             list.forEach {
                 ItemDatabase.getInstance(this@MainActivity)?.getItemDao()?.addItem(it)
             }
             //print database content
             ItemDatabase.getInstance(this@MainActivity)?.getItemDao()?.getItems()?.forEach {
                 Log.d(TAG, "Room: ${it.title} ${it.id} ${it.price}")
-            }
+            }*/
             
         })
 //        setupAdapter()

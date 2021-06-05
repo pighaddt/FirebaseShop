@@ -2,6 +2,7 @@ package com.angus.shop
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.angus.shop.model.Item
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.item_row.view.*

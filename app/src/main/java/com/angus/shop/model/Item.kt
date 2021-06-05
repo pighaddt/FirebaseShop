@@ -1,4 +1,4 @@
-package com.angus.shop
+package com.angus.shop.model
 
 import android.os.Parcelable
 import androidx.annotation.NonNull

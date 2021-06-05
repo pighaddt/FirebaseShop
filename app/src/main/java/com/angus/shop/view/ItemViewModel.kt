@@ -1,11 +1,9 @@
-package com.angus.shop
+package com.angus.shop.view
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.QuerySnapshot
+import com.angus.shop.model.Item
+import com.angus.shop.view.FirebaseQueryLiveData
 
 class ItemViewModel : ViewModel(){
     private var items = MutableLiveData<List<Item>>()

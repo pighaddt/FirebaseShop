@@ -1,9 +1,10 @@
-package com.angus.shop
+package com.angus.shop.data
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.angus.shop.model.Item
 
 @Dao
 interface ItemDao {
