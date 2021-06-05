@@ -16,7 +16,7 @@ abstract class ItemDatabase : RoomDatabase() {
                 .allowMainThreadQueries() // room only work in main thread
                 .build()
         }
-        fun getInstance(context : Context) : ItemDatabase?{
+        fun getInstance(context : Context) : ItemDatabase{
            Companion.context = context
             return database
         }

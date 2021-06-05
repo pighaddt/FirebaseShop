@@ -5,11 +5,12 @@ import com.angus.shop.model.Item
 import com.google.firebase.firestore.*
 
 class FirebaseQueryLiveData : LiveData<List<Item>>(), EventListener<QuerySnapshot> {
-    private lateinit var registration: ListenerRegistration
-    private var isRegistration : Boolean = false
-    private var query = FirebaseFirestore.getInstance().collection("items")
-    .orderBy("viewCount", Query.Direction.DESCENDING)
-    .limit(10)
+
+    lateinit var registration: ListenerRegistration
+    var isRegistration : Boolean = false
+    var query = FirebaseFirestore.getInstance().collection("items")
+        .orderBy("viewCount", Query.Direction.DESCENDING)
+        .limit(10)
 
     override fun onActive() {
         super.onActive()
